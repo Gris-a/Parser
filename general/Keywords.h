@@ -1,0 +1,7 @@
+KEYWORD(MUL, "*")
+KEYWORD(ADD, "+")
+KEYWORD(SUB, "-")
+KEYWORD(DIV, "/")
+KEYWORD(POW, "^")
+KEYWORD(SIN, "sin")
+KEYWORD(COS, "cos")

@@ -1,0 +1,6 @@
+Called from main.cpp:int main():10:
+TREE[0x7ffe5c7caea0]:
+	root: 0x6030000000a0; 
+	Variables:
+((-4)+(2))
+
