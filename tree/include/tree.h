@@ -67,6 +67,8 @@ Node *NodeCtor(data_t val, NodeType type, Node *left = NULL, Node *right = NULL)
 
 int NodeDtor(Node *node);
 
+Node *SubTreeCopy(Node *sub_tree);
+
 void TreeDump(Tree *tree, const char *func, const int line);
 
 #ifdef PROTECT

@@ -92,7 +92,12 @@ int NodeDtor(Node *node)
 }
 
 
-
+Node *SubTreeCopy(Node *sub_tree)
+{
+    if(!sub_tree) return NULL;
+    return NodeCtor(sub_tree->data, sub_tree->type, SubTreeCopy(sub_tree->left),
+                                                    SubTreeCopy(sub_tree->right));
+}
 
 
 static void MakeDumpDir(void)

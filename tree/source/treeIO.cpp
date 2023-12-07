@@ -21,7 +21,7 @@ static void DotTreeGeneral(Tree *tree, FILE *dot_file);
 
 
 
-#define KEYWORD(enum, kword) case enum: {fprintf(file, kword); return;}
+#define KEYWORD(enum, keyword, ...) case enum: {fprintf(file, keyword); return;}
 static void NodeDataPrint(FILE *file, Node *node)
 {
     switch(node->type)

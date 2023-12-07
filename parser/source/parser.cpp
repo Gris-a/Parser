@@ -103,16 +103,17 @@ static bool SkipSpaces(const char *str, size_t *pos)
 }
 
 
-#define KEYWORD(enum, keyword)  if(strcmp(keyword, name_buf) == 0)\
-                                {\
-                                    tokens[(*n_tok)++] = {.lex = NodeCtor({.kword = enum}, KWORD), .line = line, .l_pos = old_pos};\
-                                } else
+#define KEYWORD(enum, keyword, ...) if(strcmp(keyword, name_buf) == 0)\
+                                    {\
+                                        tokens[(*n_tok)++] = {.lex = NodeCtor({.kword = enum}, KWORD), .line  = line,\
+                                                                                                       .l_pos = old_pos};\
+                                    } else
 #define LINE code->lines[line - 1]
 #define CHAR code->lines[line - 1][pos]
 static Token *Tokenizator(Code *code, VariablesTable *table, size_t *n_tok)
 {
-    size_t N_TOKENS = 100;
-    Token *tokens = (Token *)calloc(N_TOKENS, sizeof(Token));
+    size_t MAX_TOK = 100;
+    Token *tokens  = (Token *)calloc(MAX_TOK, sizeof(Token));
 
     size_t line = 1;
     size_t pos  = 0;
@@ -121,9 +122,9 @@ static Token *Tokenizator(Code *code, VariablesTable *table, size_t *n_tok)
         pos = 0;
         while(CHAR != '\0')
         {
-            if((*n_tok) == N_TOKENS)
+            if((*n_tok) == MAX_TOK)
             {
-                tokens = (Token *)realloc(tokens, (N_TOKENS *= 2) * sizeof(Token));
+                tokens = (Token *)realloc(tokens, (MAX_TOK *= 2) * sizeof(Token));
             }
 
             bool is_end = SkipSpaces(LINE, &pos);
@@ -132,7 +133,7 @@ static Token *Tokenizator(Code *code, VariablesTable *table, size_t *n_tok)
             size_t old_pos = pos;
             if(isdigit(CHAR))
             {
-                double dbl      = GetDouble(LINE, &pos);
+                double dbl         = GetDouble(LINE, &pos);
                 tokens[(*n_tok)++] = {.lex = NodeCtor({.num = dbl}, NUM), .line  = line,
                                                                           .l_pos = old_pos};
             }
@@ -256,7 +257,8 @@ static Node *ParseExprAddSub(Token *tokens, size_t *t_pos, Code *code)
     Node *temp = NULL;
     Node *op   = tokens[*t_pos].lex;
 
-    while(op->type == KWORD && ((op->data.kword == ADD) || (op->data.kword == SUB)))
+    while(op->type == KWORD && ((op->data.kword == ADD) ||
+                                (op->data.kword == SUB)))
     {
         (*t_pos)++;
 
@@ -281,7 +283,8 @@ static Node *ParseExprMulDiv(Token *tokens, size_t *t_pos, Code *code)
     Node *temp = NULL;
     Node *op   = tokens[*t_pos].lex;
 
-    while(op->type == KWORD && ((op->data.kword == MUL) || (op->data.kword == DIV)))
+    while(op->type == KWORD && ((op->data.kword == MUL) ||
+                                (op->data.kword == DIV)))
     {
         (*t_pos)++;
 
@@ -323,7 +326,7 @@ static Node *ParseExprPow(Token *tokens, size_t *t_pos, Code *code)//TODO stack 
     return ret_val;
 }
 
-#define KEYWORD(enum, keyword) case enum: break;
+#define KEYWORD(enum, keyword, ...) case enum: break;
 static Node *ParsePrimary(Token *tokens, size_t *t_pos, Code *code)
 {
     Node *ret_val = tokens[*t_pos].lex;
@@ -362,7 +365,8 @@ static Node *ParsePrimary(Token *tokens, size_t *t_pos, Code *code)
 
 static Node *ParseBrackets(Token *tokens, size_t *t_pos, Code *code)
 {
-    if(!((tokens[*t_pos].lex->type == UND) && (tokens[*t_pos].lex->data.und == '(')))
+    if(!((tokens[*t_pos].lex->type     == UND) &&
+         (tokens[*t_pos].lex->data.und == '(')))
     {
         return NULL;
     }
@@ -370,7 +374,8 @@ static Node *ParseBrackets(Token *tokens, size_t *t_pos, Code *code)
 
     Node *ret_val = ParseExprAddSub(tokens,t_pos, code);
 
-    if(!((tokens[*t_pos].lex->type == UND) && (tokens[*t_pos].lex->data.und == ')')))
+    if(!((tokens[*t_pos].lex->type     == UND) &&
+         (tokens[*t_pos].lex->data.und == ')')))
     {
         return NULL;
     }
