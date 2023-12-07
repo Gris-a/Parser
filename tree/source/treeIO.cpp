@@ -39,7 +39,8 @@ static void NodeDataPrint(FILE *file, Node *node)
         case KWORD:
             switch(node->data.kword)
             {
-                #include "../../general/Keywords.h"
+                #include "../../Keywords/functions.h"
+                #include "../../Keywords/operators.h"
                 default:
                 {
                     fprintf(file, "unknown operator");

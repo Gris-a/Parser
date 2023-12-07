@@ -9,7 +9,8 @@
 #define KEYWORD(enum_name, ...) enum_name,
 enum Keyword
 {
-    #include "../../general/Keywords.h"
+    #include "../../Keywords/functions.h"
+    #include "../../Keywords/operators.h"
 };
 #undef KEYWORD
 
@@ -65,8 +66,6 @@ int TreeDtor(Tree *tree, Node *root);
 Node *NodeCtor(data_t val, NodeType type, Node *left = NULL, Node *right = NULL);
 
 int NodeDtor(Node *node);
-
-Node *SubTreeCopy(Node *sub_tree);
 
 void TreeDump(Tree *tree, const char *func, const int line);
 
